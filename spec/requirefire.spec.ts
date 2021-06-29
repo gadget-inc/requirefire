@@ -70,4 +70,8 @@ describe("requirefire", () => {
     expect(a.lodash).toBe(b.lodash);
     expect(a.lodash.omit).toBeTruthy();
   });
+
+  test("modules without newlines at the end can be required", () => {
+    const mod = _require("./fixtures/no-newline");
+  });
 });

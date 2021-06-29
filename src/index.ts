@@ -87,8 +87,8 @@ const createRequirefire = () => {
 
     // Wrap module src inside IIFE so that function declarations do not clash with global variables
     // @see https://github.com/jhnns/rewire/issues/56
-    prefix += "(function () { ";
-    const suffix = `})();`;
+    prefix += `(function () {\n`;
+    const suffix = `\n})();`;
 
     loadModuleWithWrapper(targetModule, prefix, suffix);
 
