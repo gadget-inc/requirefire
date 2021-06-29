@@ -27,6 +27,16 @@ describe("requirefire", () => {
     expect(one).toBe(two);
   });
 
+  it("the requirefire cache should be clearable", () => {
+    const one = _require("./fixtures/mod_a");
+    for (const key of Object.keys(_require.cache)) {
+      delete _require.cache[key];
+    }
+    const two = _require("./fixtures/mod_a");
+    expect(one).not.toBe(two);
+    expect(one.name).toEqual(two.name);
+  });
+
   test("different instances should return different versions of the same module when required twice", () => {
     const one = _require("./fixtures/mod_a");
     const two = requirefire()("./fixtures/mod_a");

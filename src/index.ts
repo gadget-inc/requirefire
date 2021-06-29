@@ -76,7 +76,7 @@ const createRequirefire = () => {
     (targetModule as any).__requirefire__ = requireModule;
     prefix += `
 			  const __oldRequire = require;
-			  var require = function(path) {
+			  require = function(path) {
 			      if (module.__requirefire__ && path.startsWith('.')) {
               return module.__requirefire__(path, module);
 			      } else {
