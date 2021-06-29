@@ -10,16 +10,16 @@
   "publishConfig": {
     "access": "public"
   },
-  "types": "pkg/index.d.ts",
-  "main": "pkg/index.js",
+  "types": "pkg/src/index.d.ts",
+  "main": "pkg/src/index.js",
   "files": [
-    "pkg/*",
+    "pkg/src/*",
     "Readme.md",
     "Contributing.md",
     "LICENSE.txt"
   ],
   "scripts": {
-    "build": "rm -rf pkg && tsc && chmod +x pkg/esbuild-dev.bin.js",
+    "build": "rm -rf pkg && tsc",
     "watch": "tsc -w",
     "test": "jest",
     "lint": "yarn run lint:prettier && yarn run lint:eslint",
