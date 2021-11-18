@@ -1,6 +1,7 @@
 /* eslint-disable lodash/import-scope */
 /* eslint-disable @typescript-eslint/no-var-requires */
 import requirefire, { Requirefire } from "../src";
+import path from "path";
 
 describe("requirefire", () => {
   let _require: Requirefire;
@@ -16,9 +17,11 @@ describe("requirefire", () => {
   });
 
   it("should not use node's built in require to require modules", () => {
-    const fired = _require("./fixtures/mod_a");
-    const normal = require("./fixtures/mod_a");
-    expect(fired).not.toBe(normal);
+    jest.isolateModules(() => {
+      const fired = _require("./fixtures/mod_a");
+      const normal = require("./fixtures/mod_a");
+      expect(fired).not.toBe(normal);
+    });
   });
 
   it("the same instance return cached versions of the same module when required twice", () => {
@@ -44,9 +47,31 @@ describe("requirefire", () => {
   });
 
   test("transitive requires are required through requirefire", () => {
+    jest.isolateModules(() => {
+      const outer = _require("./fixtures/outer_transitive");
+      const requiredInner = require("./fixtures/inner_transitive");
+      expect(outer.inner.now).not.toEqual(requiredInner.now);
+    });
+  });
+
+  test("transitive requires have require extensions and resolve", () => {
     const outer = _require("./fixtures/outer_transitive");
-    const requiredInner = require("./fixtures/inner_transitive");
-    expect(outer.inner.now).not.toEqual(requiredInner.now);
+    expect(outer.inner.requireKeys).toContain("cache");
+    expect(outer.inner.requireKeys).toContain("extensions");
+    expect(outer.inner.requireKeys).toContain("resolve");
+  });
+
+  test("transitive requires can resolve correctly", () => {
+    const outer = _require("./fixtures/outer_transitive");
+    expect(outer.inner.outerTransitiveResolve).toEqual(path.resolve(__dirname, "fixtures/outer_transitive.js"));
+  });
+
+  test("has a cache separate from require", () => {
+    _require("./fixtures/outer_transitive");
+    expect(_require.cache).toHaveProperty([path.resolve(__dirname, "./fixtures/outer_transitive.js")]);
+    expect(_require.cache).toHaveProperty([path.resolve(__dirname, "./fixtures/inner_transitive.js")]);
+    expect(require.cache).not.toHaveProperty([path.resolve(__dirname, "./fixtures/outer_transitive.js")]);
+    expect(require.cache).not.toHaveProperty([path.resolve(__dirname, "./fixtures/inner_transitive.js")]);
   });
 
   test("mutual (circular) requires can be required", () => {
