@@ -83,6 +83,9 @@ const createRequirefire = () => {
               return __oldRequire(path);
 			      }
 			  };
+			  require.extensions = __oldRequire.extensions;
+			  require.resolve = __oldRequire.resolve;
+			  require.cache = module.__requirefire__ ? module.__requirefire__.cache : __oldRequire.cache;
     `;
 
     // Wrap module src inside IIFE so that function declarations do not clash with global variables
@@ -100,6 +103,7 @@ const createRequirefire = () => {
     return requireModule(path, requirier);
   }
 
+  requireModule.cache = cache;
   requirefire.cache = cache;
   return requirefire;
 };
