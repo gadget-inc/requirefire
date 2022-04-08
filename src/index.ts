@@ -30,7 +30,7 @@ const getImportGlobalsSrc = (ignore: string[] = []) => {
     try {
       eval("var " + key + ";");
       src += "var " + key + " = global." + key + ";\n";
-    } catch (e) {}
+    } catch (e) { }
   }
 
   return src;
@@ -90,7 +90,7 @@ const createRequirefire = () => {
 			  require.extensions = __oldRequire.extensions;
 			  require.resolve = __oldRequire.resolve;
 			  require.cache = module.__requirefire__ ? module.__requirefire__.cache : __oldRequire.cache;
-        var process = module.__requirefire_process ? module.__requirefire_process : process;
+        var process = module.__requirefire_process ? module.__requirefire_process : global.process;
     `;
 
     // Wrap module src inside IIFE so that function declarations do not clash with global variables
