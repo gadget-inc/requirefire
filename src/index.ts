@@ -30,7 +30,7 @@ const getImportGlobalsSrc = (ignore: string[] = []) => {
     try {
       eval("var " + key + ";");
       src += "var " + key + " = global." + key + ";\n";
-    } catch (e) { }
+    } catch (e) {}
   }
 
   return src;
