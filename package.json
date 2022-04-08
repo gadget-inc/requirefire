@@ -26,7 +26,8 @@
     "lint:prettier": "node --max-old-space-size=4096 node_modules/.bin/prettier --check \"src/**/*.{js,ts,tsx}\"",
     "lint:eslint": "node --max-old-space-size=4096 node_modules/.bin/eslint --quiet --ext ts,tsx src",
     "lint:fix": "node --max-old-space-size=4096 node_modules/.bin/prettier --write --check \"src/**/*.{js,ts,tsx}\" && eslint --ext ts,tsx --fix src",
-    "prerelease": "gitpkg publish"
+    "prerelease": "gitpkg publish",
+    "prepublishOnly": "build"
   },
   "dependencies": {},
   "devDependencies": {
