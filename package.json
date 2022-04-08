@@ -1,6 +1,6 @@
 {
   "name": "requirefire",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "Harry Brundage",
   "license": "MIT",
   "repository": {
@@ -27,7 +27,7 @@
     "lint:eslint": "node --max-old-space-size=4096 node_modules/.bin/eslint --quiet --ext ts,tsx src",
     "lint:fix": "node --max-old-space-size=4096 node_modules/.bin/prettier --write --check \"src/**/*.{js,ts,tsx}\" && eslint --ext ts,tsx --fix src",
     "prerelease": "gitpkg publish",
-    "prepublishOnly": "build"
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {},
   "devDependencies": {
