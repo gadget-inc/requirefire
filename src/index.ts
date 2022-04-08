@@ -18,6 +18,8 @@ const getImportGlobalsSrc = (ignore: string[] = []) => {
   // shadow the module-internal variables
   // @see https://github.com/jhnns/rewire-webpack/pull/6
   ignore.push("module", "exports", "require");
+  // ignore the 'process' object, we give it special treatment
+  ignore.push("process");
 
   for (key in global) {
     if (ignore.includes(key)) {
@@ -27,7 +29,7 @@ const getImportGlobalsSrc = (ignore: string[] = []) => {
     // key may be an invalid variable name (e.g. 'a-b')
     try {
       eval("var " + key + ";");
-      src += "var " + key + " = global." + key + "; ";
+      src += "var " + key + " = global." + key + ";\n";
     } catch (e) {}
   }
 
@@ -72,8 +74,10 @@ const createRequirefire = () => {
     // We prepend a list of all globals declared with var so they can be overridden (without changing original globals)
     let prefix = getImportGlobalsSrc();
 
-    // Intercept require calls when evaluating the rewired module to rewire those inner requires
+    // Intercept require calls when evaluating the inner module to use requirefire
     (targetModule as any).__requirefire__ = requireModule;
+    (targetModule as any).__requirefire_process = process;
+
     prefix += `
 			  const __oldRequire = require;
 			  require = function(path) {
@@ -86,6 +90,7 @@ const createRequirefire = () => {
 			  require.extensions = __oldRequire.extensions;
 			  require.resolve = __oldRequire.resolve;
 			  require.cache = module.__requirefire__ ? module.__requirefire__.cache : __oldRequire.cache;
+        var process = module.__requirefire_process ? module.__requirefire_process : process;
     `;
 
     // Wrap module src inside IIFE so that function declarations do not clash with global variables
