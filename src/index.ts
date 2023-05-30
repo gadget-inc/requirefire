@@ -81,7 +81,8 @@ const createRequirefire = () => {
     prefix += `
 			  const __oldRequire = require;
 			  require = function(path) {
-			      if (module.__requirefire__ && path.startsWith('.')) {
+            const resolvedPath = __oldRequire.resolve(path);
+			      if (module.__requirefire__ && (path.startsWith('.') || module.__requirefire__.cache[resolvedPath])) {
               return module.__requirefire__(path, module);
 			      } else {
               return __oldRequire(path);
