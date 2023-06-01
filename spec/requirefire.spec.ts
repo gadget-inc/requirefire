@@ -1,7 +1,7 @@
 /* eslint-disable lodash/import-scope */
 /* eslint-disable @typescript-eslint/no-var-requires */
-import requirefire, { Requirefire } from "../src";
 import path from "path";
+import requirefire, { Requirefire } from "../src";
 
 describe("requirefire", () => {
   let _require: Requirefire;
@@ -98,5 +98,13 @@ describe("requirefire", () => {
 
   test("modules without newlines at the end can be required", () => {
     const mod = _require("./fixtures/no-newline");
+  });
+
+  test("aliased modules that resolve to the same module should resolve to the same module if cached", () => {
+    const linked = _require("./fixtures/linked_module");
+    linked.foo = "not foo";
+    const { linked: outerLinked } = _require("./fixtures/outer_linked_module");
+
+    expect(linked).toBe(outerLinked);
   });
 });
