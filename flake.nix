@@ -1,5 +1,5 @@
 {
-  description = "wds development environment";
+  description = "requirefire development environment";
 
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
@@ -21,10 +21,8 @@
           packages =
             rec {
               bash = pkgs.bash;
-              nodejs = pkgs.nodejs-16_x;
-              yarn = pkgs.yarn.override {
-                inherit nodejs;
-              };
+              nodejs = pkgs.nodejs-18_x;
+              pnpm = pkgs.nodePackages.pnpm;
             };
 
           devShell = pkgs.mkShell {
