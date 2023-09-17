@@ -21,7 +21,7 @@ const getImportGlobalsSrc = (ignore: string[] = []) => {
   // ignore the 'process' object, we give it special treatment
   ignore.push("process");
 
-  for (key in global) {
+  for (key in globalThis) {
     if (ignore.includes(key)) {
       continue;
     }
@@ -30,7 +30,9 @@ const getImportGlobalsSrc = (ignore: string[] = []) => {
     try {
       eval("var " + key + ";");
       src += "var " + key + " = global." + key + ";\n";
-    } catch (e) {}
+    } catch (e) {
+      // suppress invalid variable names
+    }
   }
 
   return src;
