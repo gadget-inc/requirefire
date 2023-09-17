@@ -49,8 +49,16 @@ describe("requirefire", () => {
   test("transitive requires are required through requirefire", () => {
     jest.isolateModules(() => {
       const outer = _require("./fixtures/outer_transitive");
+      const inner = _require("./fixtures/inner_transitive");
+      expect(outer.inner.random).toEqual(inner.random);
+    });
+  });
+
+  test("transitive requires are can still be required through normal require", () => {
+    jest.isolateModules(() => {
+      const outer = _require("./fixtures/outer_transitive");
       const requiredInner = require("./fixtures/inner_transitive");
-      expect(outer.inner.now).not.toEqual(requiredInner.now);
+      expect(outer.inner.random).not.toEqual(requiredInner.random);
     });
   });
 

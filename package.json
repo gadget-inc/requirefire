@@ -48,5 +48,8 @@
     "npm": "^10.1.0",
     "prettier": "^2.8.8",
     "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "is-builtin-module": "^3.2.1"
   }
 }

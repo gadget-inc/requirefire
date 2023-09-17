@@ -13,8 +13,15 @@ describe("modules that change in the same process lifetime", () => {
   });
 
   describe.each(["foo", "bar", "baz"])("case %s", (name) => {
-    test("a file with different contents can be returned in a test", async () => {
+    test("a file with different contents can be required", async () => {
       await fs.writeFile(path.join(tmpdir, "index.js"), `module.exports = "${name}";`);
+      const result = _require(path.join(tmpdir, "index.js"));
+      expect(result).toBe(name);
+    });
+
+    test("a file with different contents can be transitively required", async () => {
+      await fs.writeFile(path.join(tmpdir, "index.js"), `module.exports = require("./content");`);
+      await fs.writeFile(path.join(tmpdir, "content.js"), `module.exports = "${name}";`);
       const result = _require(path.join(tmpdir, "index.js"));
       expect(result).toBe(name);
     });
@@ -25,7 +32,6 @@ describe("modules that change in the same process lifetime", () => {
     const modDir = path.join(os.tmpdir(), "requirefire-test");
     await fs.rm(modDir, { recursive: true, force: true });
     await fs.mkdir(modDir);
-    console.log(`running test in ${modDir}`)
 
     await fs.writeFile(path.join(modDir, "index.js"), `module.exports = require('test-mod');`);
     await fs.writeFile(path.join(modDir, "package.json"), JSON.stringify({
