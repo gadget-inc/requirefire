@@ -5,7 +5,13 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: [16, 18, 20]
     steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.version }}
       - uses: actions/checkout@v2.3.4
       - uses: ./.github/actions/setup-test-env
       - name: Test
