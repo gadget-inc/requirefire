@@ -17,7 +17,7 @@ npm install requirefire
 or
 
 ```
-yarn add requirefire
+pnpm add requirefire
 ```
 
 ## Usage
