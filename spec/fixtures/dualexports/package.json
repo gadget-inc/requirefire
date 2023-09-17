@@ -1,0 +1,11 @@
+{
+  "name": "subexports",
+  "version": "0.2.0",
+  "main": "dist/main.js",
+  "exports": {
+    ".": {
+      "import": "esm/index.js",
+      "require": "cjs/index.js"
+    }
+  }
+}
