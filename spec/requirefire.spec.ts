@@ -1,7 +1,8 @@
 /* eslint-disable lodash/import-scope */
 /* eslint-disable @typescript-eslint/no-var-requires */
 import path from "path";
-import requirefire, { Requirefire } from "../src";
+import type { Requirefire } from "../src";
+import requirefire from "../src";
 
 describe("requirefire", () => {
   let _require: Requirefire;

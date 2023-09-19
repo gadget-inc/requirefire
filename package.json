@@ -25,9 +25,9 @@
     "test": "jest",
     "typecheck": "tsc --noEmit",
     "lint": "pnpm  lint:prettier && pnpm run lint:eslint",
-    "lint:prettier": "prettier --check \"src/**/*.{js,ts,tsx}\"",
+    "lint:prettier": "prettier --check \"{src,spec}/**/*.{js,ts,tsx}\"",
     "lint:eslint": "eslint --quiet --ext ts,tsx src",
-    "lint:fix": "prettier --write --check \"src/**/*.{js,ts,tsx}\" && eslint --ext ts,tsx --fix src",
+    "lint:fix": "prettier --write --check \"{src,spec}/**/*.{js,ts,tsx}\" && eslint --ext ts,tsx --fix src spec",
     "prerelease": "gitpkg publish",
     "prepublishOnly": "npm run build"
   },
