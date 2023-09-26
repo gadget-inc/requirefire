@@ -1,0 +1,9 @@
+{
+  "name": "subexports",
+  "version": "0.2.0",
+  "main": "dist/main.js",
+  "exports": {
+    ".": "./dist/main.js",
+    "./sub": "./dist/sub.js"
+  }
+}
