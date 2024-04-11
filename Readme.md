@@ -25,32 +25,32 @@ pnpm add requirefire
 The `requirefire` module exports a factory function which must be called to create a new `require` function. So, import the `createRequirefire` function from the module, and then invoke it to create a new version of `require`.
 
 ```typescript
-import createRequirefire from "requirefire"
+import createRequirefire from "requirefire";
 
-// create a requirefire instance
-const requirefire = createRequirefire()
+// create a requirefire instance, using this module as the parent module
+const requirefire = createRequirefire(module);
 ```
 
 ```typescript
 // require a module
-const someModule = requirefire("./someModule")
+const someModule = requirefire("./someModule");
 
 // requiring the module a second time will return the same instance from a cache, same as normal `require`
-someModule == requirefire("./someModule") // true
+someModule == requirefire("./someModule"); // true
 
 // requiring a module with requirefire will return a different instance of the same module than normal `require`
-someModule == require("./someModule") // false
+someModule == require("./someModule"); // false
 
 // the requirefire instance has a .cache property that can be mutated
-delete requirefire.cache['path/to/someModule']
+delete requirefire.cache["path/to/someModule"];
 
 // once the cache is cleared, requirefire will re-execute the module from disk when required again
-const newSomeModule = requirefire("./someModule")
-someModule == newSomeModule // false
+const newSomeModule = requirefire("./someModule");
+someModule == newSomeModule; // false
 
 // multiple requirefire instances can be created, and each has an independent require cache
-const otherRequirefire = createRequirefire()
-requirefire("./someModule") == otherRequirefire("./someModule") // false
+const otherRequirefire = createRequirefire();
+requirefire("./someModule") == otherRequirefire("./someModule"); // false
 ```
 
 ## See Also
