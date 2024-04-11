@@ -110,4 +110,16 @@ describe("requirefire", () => {
     expect(mod.main.key).toEqual("main");
     expect(mod.sub.key).toEqual("sub");
   });
+
+  test("instances can be passed the parent module for resolving relative paths", () => {
+    _require = requirefire(module);
+
+    const one = _require("./fixtures/mod_a");
+    for (const key of Object.keys(_require.cache)) {
+      delete _require.cache[key];
+    }
+    const two = _require("./fixtures/mod_a");
+    expect(one).not.toBe(two);
+    expect(one.name).toEqual(two.name);
+  })
 });

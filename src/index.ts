@@ -58,8 +58,14 @@ const loadModuleWithWrapper = (module: Module, prefix: string, suffix: string) =
 
 /**
  * Produce a new requirefire instance.
+ * 
+ * @param contextModule The module that will be used as the parent module for the requirefire instance. Relative paths will be resolved relative to this module.
  */
-const createRequirefire = () => {
+const createRequirefire = (contextModule?: Module) => {
+  if (!contextModule && module.parent) {
+    contextModule = module.parent;
+  }
+
   const cache: Record<string, Module> = {};
   const resolver = ResolverFactory.createResolver({
     useSyncFileSystemCalls: true,
@@ -130,8 +136,7 @@ const createRequirefire = () => {
   }
 
   function requirefire(path: string) {
-    const requirier = module.parent ? module.parent : undefined;
-    return requireModule(path, requirier);
+    return requireModule(path, contextModule);
   }
 
   requireModule.cache = cache;
