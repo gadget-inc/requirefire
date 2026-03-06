@@ -58,7 +58,7 @@ const loadModuleWithWrapper = (module: Module, prefix: string, suffix: string) =
 
 /**
  * Produce a new requirefire instance.
- * 
+ *
  * @param contextModule The module that will be used as the parent module for the requirefire instance. Relative paths will be resolved relative to this module.
  */
 const createRequirefire = (contextModule?: Module) => {
@@ -71,7 +71,7 @@ const createRequirefire = (contextModule?: Module) => {
     useSyncFileSystemCalls: true,
     fileSystem: fs as any,
     conditionNames: ["require", "node"],
-    extensions: [".js", ".json", ".node", ...Object.keys(require.extensions)],
+    extensions: [".js", ".json", ".node", ...Object.keys((Module as any)._extensions)],
   });
 
   function requireModule(request: string, parentModule?: Module) {

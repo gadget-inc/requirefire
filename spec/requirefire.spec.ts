@@ -111,6 +111,14 @@ describe("requirefire", () => {
     expect(mod.sub.key).toEqual("sub");
   });
 
+  test("require.extensions reflects Module._extensions even when jest patches it", () => {
+    const Module = require("module");
+    const moduleExtensions = Object.keys(Module._extensions);
+    // Jest patches require.extensions to {}, but requirefire should still pick up the real extensions
+    expect(Object.keys(require.extensions)).toEqual([]);
+    expect(moduleExtensions).toEqual(expect.arrayContaining([".js", ".json", ".node"]));
+  });
+
   test("instances can be passed the parent module for resolving relative paths", () => {
     _require = requirefire(module);
 
@@ -121,5 +129,5 @@ describe("requirefire", () => {
     const two = _require("./fixtures/mod_a");
     expect(one).not.toBe(two);
     expect(one.name).toEqual(two.name);
-  })
+  });
 });
