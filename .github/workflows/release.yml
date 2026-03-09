@@ -13,18 +13,24 @@ jobs:
   release:
     needs: test
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/actions/setup-test-env
-      - id: npm-publish
-        name: Publish requirefire to npm
-        uses: JS-DevTools/npm-publish@v1
+      - uses: actions/setup-node@v4
         with:
-          token: ${{ secrets.NPM_TOKEN }}
-          access: public
+          node-version: 24
+      - uses: ./.github/actions/setup-test-env
+      - name: Update npm to latest
+        run: npm install -g npm@latest
+      - name: Publish requirefire to npm
+        run: npm publish --access public
+      - name: Get version
+        id: version
+        run: echo "version=$(node -p 'require(\"./package.json\").version')" >> "$GITHUB_OUTPUT"
       - name: Publish Release to github
         uses: softprops/action-gh-release@v1
-        if: ${{ steps.npm-publish.outputs.type != 'none' }}
         with:
-          tag_name: ${{ steps.npm-publish.outputs.version }}
+          tag_name: ${{ steps.version.outputs.version }}
           generate_release_notes: true
